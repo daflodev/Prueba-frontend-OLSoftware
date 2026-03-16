@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+    --brand-primary: #E91E63;
+    --brand-dark: #C2185B;
+}
+
+@layer base {
+    body {
+        @apply antialiased text-gray-900 bg-gray-50;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-gray-100;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+    }
+}
+
+@layer components {
+
+    .form-input-container {
+        @apply relative flex flex-col gap-1 w-full;
+    }
+    .bg-login-pattern {
+    background-image: url('./assets/login-fondo.png');
+}
+
+  .login-card {
+      
+      @apply bg-white rounded-xl p-8 w-full max-w-md shadow-2xl;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      
+  }
+
+  .auth-bg-overlay {
+      @apply absolute inset-0 bg-black/40 backdrop-blur-[2px];
+  }
+}
+
+@layer utilities {
+    .text-shadow-md {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .bg-brand {
+        background-color: var(--brand-primary);
+    }
+
+    .bg-brand:hover {
+        background-color: var(--brand-dark);
+    }
+}
