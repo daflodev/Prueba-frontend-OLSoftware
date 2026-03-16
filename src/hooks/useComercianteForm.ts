@@ -8,7 +8,6 @@ import { comerciantesService } from '@/services/comercianteServices';
 export const useComercianteForm = (id?: string) => {
     const navigate = useNavigate();
 
-    // Acciones y estado del store (Zustand)
     const { municipios, isSubmitting } = useComercianteStore();
     const { setMunicipios, setIsSubmitting } = useComercianteActions();
 
@@ -22,34 +21,28 @@ export const useComercianteForm = (id?: string) => {
     } = useForm({
         defaultValues: {
             nombreRazonSocial: '',
-            departamento: '',      // Campo virtual para el filtro
-            municipioId: '',       // Se maneja como string para el <select>
+            departamento: '',      
+            municipioId: '',       
             telefono: '',
             correoElectronico: '',
             fechaRegistro: new Date().toISOString().split('T')[0],
             estado: 'Activo',
             poseeEstablecimientos: false,
-            establecimientos: [] as any[] // Data de establecimientos (Reto 3/7)
+            establecimientos: [] as any[] 
         }
     });
 
-    // 1. Carga inicial de datos
     useEffect(() => {
         const initialize = async () => {
             try {
-                // Paso A: Cargar catálogo de municipios (Trae todos + departamentos)
                 const muns = await comerciantesService.obtenerMunicipios();
                 setMunicipios(muns);
 
-                // Paso B: Si es edición, cargar el detalle del comerciante
                 if (id) {
                     const res = await comerciantesService.obtenerPorId(Number(id));
 
                     if (res.succeeded && res.data) {
                         const data = res.data;
-
-                        // Lógica de Mapeo: Buscamos el objeto municipio por nombre 
-                        // para obtener su ID y su DEPARTAMENTO
                         const munInfo = muns.find(
                             (m) => m.nombre.toLowerCase() === data.municipio.toLowerCase()
                         );
@@ -59,7 +52,6 @@ export const useComercianteForm = (id?: string) => {
                             departamento: munInfo?.departamento || '',
                             municipioId: munInfo ? String(munInfo.id) : '',
                             fechaRegistro: data.fechaRegistro.split('T')[0],
-                            // Aseguramos que los establecimientos existan para las sumatorias
                             establecimientos: data.establecimientos || []
                         });
                     }
@@ -73,7 +65,6 @@ export const useComercianteForm = (id?: string) => {
         initialize();
     }, [id, reset, setMunicipios]);
 
-    // 2. Lógica de Cascada (Departamentos -> Municipios)
     const deptoSeleccionado = watch("departamento");
 
     const listaDepartamentos = useMemo(() => {
@@ -86,7 +77,6 @@ export const useComercianteForm = (id?: string) => {
         return municipios.filter(m => m.departamento === deptoSeleccionado);
     }, [deptoSeleccionado, municipios]);
 
-    // Limpiar municipio si cambia el departamento
     useEffect(() => {
         const subscription = watch((value, { name }) => {
             if (name === 'departamento') setValue('municipioId', '');
@@ -137,6 +127,8 @@ export const useComercianteForm = (id?: string) => {
         totales,
         isEditing: !!id,
         isSubmitting,
-        deptoSeleccionado
+        deptoSeleccionado,
+        watch,   
+        setValue, 
     };
 };

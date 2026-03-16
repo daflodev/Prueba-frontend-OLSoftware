@@ -12,12 +12,11 @@ export const useComerciantes = (page: number = 1, limit: number = 5) => {
         setLoading(true);
         try {
             const res = await comerciantesService.obtenerPaginados(p, l);
-
             setData(
-                res.datos,          
-                res.total,           
-                res.pagina,          
-                res.itemsPorPagina   
+                res.datos,
+                res.total,
+                res.pagina,
+                res.itemsPorPagina
             );
         } catch (error) {
             toast.error("No se pudo obtener la lista de comerciantes");

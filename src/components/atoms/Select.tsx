@@ -18,8 +18,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     )}
                     <select
                         ref={ref}
-                        className={`w-full px-3 py-2 border rounded-lg focus:ring-1 focus:ring-pink-500 outline-none bg-white appearance-none ${error ? 'border-red-500' : 'border-gray-300'
-                            } ${className}`}
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-1 focus:ring-pink-500 outline-none bg-white appearance-none ${
+                            error ? 'border-red-500' : 'border-gray-300'
+                        } ${className}`}
                         {...props}
                     >
                         <option value="">Seleccione una opción</option>
