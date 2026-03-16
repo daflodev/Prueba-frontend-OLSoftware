@@ -17,10 +17,10 @@ export const FormLayout = ({
     isSubmitting
 }: FormLayoutProps) => {
     return (
-        <div className="flex flex-col h-full bg-[#f4f6fc] relative overflow-hidden">
+        <div className="flex flex-col h-full bg-[#dbe4fc] relative overflow-hidden">
 
             {/* SUBHEADER */}
-            <div className="w-full bg-[#f4f6fc] px-10 py-4 border-b border-gray-200 shadow-sm shrink-0">
+            <div className="w-full bg-[#eaecf3] px-10 py-4 border-b border-gray-200 shadow-sm shrink-0">
                 <h1 className="text-[20px] font-bold text-[#0a125a] tracking-tight">
                     {title || "Nuevo Registro"}
                 </h1>
