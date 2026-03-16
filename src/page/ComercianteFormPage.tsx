@@ -24,10 +24,6 @@ export const ComercianteFormPage = () => {
                     formLogic={formLogic} 
                 />
             </div>
-
-            <footer className="mt-8 text-center text-gray-400 text-[10px] uppercase tracking-widest">
-                OL Software - Prueba Técnica © 2026
-            </footer>
         </FormLayout>
     );
 };

@@ -9,12 +9,12 @@ export const RootLayout = () => {
     const isForm = location.pathname.includes('/nuevo') || location.pathname.includes('/editar');
 
     return (
-        <div className="h-screen w-full flex flex-col overflow-hidden bg-[#f4f6fc]">
+        <div className="h-screen w-full flex flex-col overflow-hidden bg-[#dbe4fc]">
             <Header />
 
             {isForm ? (
                 <></>
-            ) : <div className="w-full bg-[#f4f6fc] px-10 py-4 border-b border-gray-200 shadow-sm z-20">
+            ) : <div className="w-full bg-[#eaecf3] px-10 py-4 border-b border-gray-200 shadow-sm z-20">
                 <h1 className="text-[20px] font-bold text-[#0a125a]">Lista de Formularios creados</h1>
             </div> }
 
