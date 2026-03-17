@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Header } from "../organism/Header";
 
 interface AuthLayoutProps { children: ReactNode }
 

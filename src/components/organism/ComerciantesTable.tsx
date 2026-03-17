@@ -93,7 +93,7 @@ export const ComerciantesTable = () => {
 
     return (
         <>
-            <div className="w-full h-full overflow-hidden flex flex-col">
+            <div className="w-full overflow-hidden flex flex-col">
                 <Table<Comerciante>
                     data={comerciantes}
                     columns={columns}

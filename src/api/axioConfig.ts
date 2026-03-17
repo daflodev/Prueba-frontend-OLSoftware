@@ -1,35 +1,27 @@
-
 import axios, { type InternalAxiosRequestConfig, AxiosError } from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 import { toast } from 'sonner';
 
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5042/api',
-    withCredentials: true, // Crucial para Cookies con .NET
+    withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Interceptor de Petición (Request)
-axiosClient.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
-
-// Interceptor de Respuesta (Response)
 axiosClient.interceptors.response.use(
     (response) => {
+        // Solo mostrar éxito en peticiones que no sean GET
         if (['post', 'put', 'delete'].includes(response.config.method || '')) {
+            // Opcional: Podrías quitar esto si prefieres manejar el éxito en el Hook también
             toast.success('Operación realizada con éxito');
         }
         return response;
     },
-    (error: AxiosError<{ message?: string }>) => {
+    (error: AxiosError<any>) => {
         const status = error.response?.status;
-        const errorMessage = error.response?.data?.message || 'Ocurrió un error inesperado';
+        const data = error.response?.data;
 
         switch (status) {
             case 401:
@@ -45,7 +37,11 @@ axiosClient.interceptors.response.use(
                 break;
 
             case 400:
-                toast.error(`Error de validación: ${errorMessage}`);
+                // IMPORTANTE: No disparamos toast.error aquí si hay un objeto "errors"
+                // porque el Hook se encargará de mapearlos.
+                if (!data?.errors) {
+                    toast.error(data?.message || 'Error de validación');
+                }
                 break;
 
             case 500:
@@ -53,7 +49,7 @@ axiosClient.interceptors.response.use(
                 break;
 
             default:
-                toast.error(errorMessage);
+                toast.error(data?.message || 'Ocurrió un error inesperado');
                 break;
         }
 

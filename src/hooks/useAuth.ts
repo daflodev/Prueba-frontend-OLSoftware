@@ -8,7 +8,7 @@ import type { LoginCredentials } from '@/types/authTypes';
 
 export const useAuth = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { setAuth, clearAuth } = useAuthActions(); // Usando tu selector optimizado
+    const { setAuth, clearAuth } = useAuthActions(); 
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -39,7 +39,6 @@ export const useAuth = () => {
         } finally {
             clearAuth();
             navigate('/login', { replace: true });
-            toast.info('Sesión cerrada correctamente');
         }
     };
 

@@ -1,9 +1,8 @@
-// src/components/organism/ComercianteForm.tsx
 import { Input } from '@/components/atoms/Input';
 import { Select } from '@/components/atoms/Select';
 
 interface ComercianteFormProps {
-    formLogic: any; 
+    formLogic: any;
 }
 
 export const ComercianteForm = ({ formLogic }: ComercianteFormProps) => {

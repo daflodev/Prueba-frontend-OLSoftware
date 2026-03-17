@@ -26,7 +26,7 @@ export const Table = <T extends Record<string, any>>({
     if (!data.length) return <div className="p-8 text-center text-gray-500">{emptyMessage}</div>;
 
     return (
-        <div className="w-full overflow-hidden border border-slate-200 rounded-xl shadow-sm bg-white">
+        <div className="w-full overflow-hidden border border-slate-200  shadow-sm bg-white">
             <table className="w-full text-center border-collapse">
                 <thead className="bg-[#4da6ff] text-white">
                     <tr>
@@ -41,8 +41,8 @@ export const Table = <T extends Record<string, any>>({
                     {data.map((item, rowIndex) => (
                         <tr
                             key={rowIndex}
-                            className={`border-b border-slate-100 transition-colors hover:bg-blue-50/30 ${
-                                rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50/80'
+                            className={`border-b border-slate-100 transition-colors 
+                                 ${rowIndex % 2 === 0 ? 'bg-white' : 'bg-zinc-300/50'
                                 }`}
                         >
                             {columns.map((col, colIndex) => (

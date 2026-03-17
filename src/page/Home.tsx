@@ -4,7 +4,6 @@ import { useAuthUser } from '@/store/useAuthStore';
 import { useComerciantes } from '@/hooks/useComerciantes';
 import { ComerciantesTable } from '@/components/organism/ComerciantesTable';
 import { Pagination } from '@/components/molecules/Pagination';
-import { toast } from 'sonner';
 
 const colors = {
     primary: '#e81f76', 
@@ -38,7 +37,7 @@ export const ComerciantesPage = () => {
     };
 
     return (
-        <div className="w-full h-full p-4 md:px-10 md:py-4 flex flex-col gap-4 font-sans overflow-hidden bg-[#f4f6fc]">
+        <div className="w-full h-full p-4 md:px-10 md:py-4 flex flex-col gap-4 font-sans overflow-hidden">
 
            
             <div className="flex justify-end w-full">
@@ -55,12 +54,12 @@ export const ComerciantesPage = () => {
             </div>
 
            
-            <div className="flex-1 overflow-hidden">
+            <div className="flex overflow-hidden">
                 <ComerciantesTable />
             </div>
 
          
-            <div className="py-2 shrink-0">
+            <div className="">
                 <Pagination
                     totalItems={totalRegistros}
                     itemsPerPage={limit}

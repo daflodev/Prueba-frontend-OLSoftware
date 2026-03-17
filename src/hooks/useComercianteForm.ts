@@ -17,18 +17,19 @@ export const useComercianteForm = (id?: string) => {
         reset,
         watch,
         setValue,
+        setError,
         formState: { errors }
     } = useForm({
         defaultValues: {
             nombreRazonSocial: '',
-            departamento: '',      
-            municipioId: '',       
+            departamento: '',
+            municipioId: '',
             telefono: '',
             correoElectronico: '',
             fechaRegistro: new Date().toISOString().split('T')[0],
             estado: 'Activo',
             poseeEstablecimientos: false,
-            establecimientos: [] as any[] 
+            establecimientos: [] as any[]
         }
     });
 
@@ -40,7 +41,6 @@ export const useComercianteForm = (id?: string) => {
 
                 if (id) {
                     const res = await comerciantesService.obtenerPorId(Number(id));
-
                     if (res.succeeded && res.data) {
                         const data = res.data;
                         const munInfo = muns.find(
@@ -57,15 +57,14 @@ export const useComercianteForm = (id?: string) => {
                     }
                 }
             } catch (error) {
-                toast.error("Error al cargar la información del formulario");
-                console.error(error);
+                toast.error("Error al cargar la información");
             }
         };
-
         initialize();
     }, [id, reset, setMunicipios]);
 
     const deptoSeleccionado = watch("departamento");
+    const listaEstablecimientos = watch("establecimientos") || [];
 
     const listaDepartamentos = useMemo(() => {
         const uniqueDeptos = Array.from(new Set(municipios.map(m => m.departamento)));
@@ -77,21 +76,19 @@ export const useComercianteForm = (id?: string) => {
         return municipios.filter(m => m.departamento === deptoSeleccionado);
     }, [deptoSeleccionado, municipios]);
 
-    useEffect(() => {
-        const subscription = watch((value, { name }) => {
-            if (name === 'departamento') setValue('municipioId', '');
-        });
-        return () => subscription.unsubscribe();
-    }, [watch, setValue]);
-
-    const listaEstablecimientos = watch("establecimientos") || [];
-
     const totales = useMemo(() => {
         return listaEstablecimientos.reduce((acc, est: any) => ({
             ingresos: acc.ingresos + (Number(est.ingresos) || 0),
             empleados: acc.empleados + (Number(est.numeroEmpleados) || 0)
         }), { ingresos: 0, empleados: 0 });
     }, [listaEstablecimientos]);
+
+    useEffect(() => {
+        const subscription = watch((_, { name }) => {
+            if (name === 'departamento') setValue('municipioId', '');
+        });
+        return () => subscription.unsubscribe();
+    }, [watch, setValue]);
 
     const onSave = async (formData: any) => {
         setIsSubmitting(true);
@@ -105,14 +102,32 @@ export const useComercianteForm = (id?: string) => {
                 ? await comerciantesService.actualizar(Number(id), payload)
                 : await comerciantesService.crear(payload);
 
-            if (response.data.succeeded) {
+            const result = response.data || response;
+
+            if (result.succeeded) {
                 toast.success(id ? "Actualizado correctamente" : "Creado correctamente");
                 navigate('/dashboard');
             } else {
-                toast.error(response.data.message || "Ocurrió un error");
+                toast.error(result.message || "Error en la operación");
             }
-        } catch (error) {
-            toast.error("Error crítico al conectar con el servidor");
+        } catch (error: any) {
+            const apiErrors = error.response?.data?.errors;
+
+            if (apiErrors) {
+                const messages = Object.values(apiErrors).flat() as string[];
+
+                messages.forEach(msg => toast.error(msg));
+
+                Object.keys(apiErrors).forEach((key) => {
+                    const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
+                    setError(fieldName as any, {
+                        type: "server",
+                        message: apiErrors[key][0]
+                    });
+                });
+            } else {
+                toast.error("Error crítico al conectar con el servidor");
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -128,7 +143,7 @@ export const useComercianteForm = (id?: string) => {
         isEditing: !!id,
         isSubmitting,
         deptoSeleccionado,
-        watch,   
-        setValue, 
+        watch,
+        setValue,
     };
 };
